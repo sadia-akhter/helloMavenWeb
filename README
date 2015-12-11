@@ -1,0 +1,63 @@
+System info:
+———————————
+OS: Mac OSX Yosemite, version 10.10.5
+java: java version "1.8.0_25"
+
+install/setup eclipse
+——————————————————————
+1. download Eclipse IDE for Java EE Developers for Mac OS Z (Cocoa) 64-bit from
+     http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars1 
+2. unzip it and move it to the Applications folder
+3. start it and use /path-to-workspace/workspace as the default workspace
+4. check the version of Eclipse. Currently I have:
+	Eclipse Java EE IDE for Web Developers.
+	Version: Mars.1 Release (4.5.1)
+
+install Maven plugin
+—————————————————————
+1. check if maven plugin is already installed. if not, then install it.
+
+install/setup Apache Tomcat Server
+——————————————————————————————————-
+[reference: http://crunchify.com/step-by-step-guide-to-setup-and-install-apache-tomcat-server-in-eclipse-development-environment-ide/]
+
+1. download Apache Tomcat from http://tomcat.apache.org/download-80.cgi 
+   Current version is 8.0.30
+2. Copy it into Documents directory and unzip it
+3. In Eclipse, Go the the Servers window and click on “No servers are available…..”
+4. Select Tomcat v8.0 Server and click next
+5. select Tomcat installation directory by browsing and click finish
+6. double on the Tomcat v8.0 Server at localhost to get the port info.
+   default HTTP/1.1 should be 8080
+7. select the Tomcat server under Servers tab, and click the run button.
+
+check point: you should see a directory called servers in the ‘Project Explorer’ window
+
+create dynamic web project using Maven
+——————————————————————————————————————
+[ref: http://crunchify.com/how-to-create-dynamic-web-project-using-maven-in-eclipse/]
+1. in eclipse, click file -> new -> Maven project
+2. select the ‘Use default Workspace location’ and click next
+3. select ‘maven-archetype-webapp’ and click next
+4. in group id, put com.yourname
+5. in artifact id, put helloMavenWeb and click finish
+6. in the ‘Project Explorer’ window, you can see a new project called helloMavenWeb with error message:
+   ‘The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path’.
+7. fix it by adding the following dependency in the pom.xml file
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+8. another error shows on pom.xml 
+   ‘/path-to-workspace/helloMavenWeb/target/m2e-wtp/web-resources/META-INF/MANIFEST.MF (No such file or directory)’
+9. fix it by right click on project -> properties -> Maven -> Java EE Integration 
+   -> check Enable Project Specific Settings -> uncheck Maven Archiver generates files under the build directory 
+   -> apply -> ok
+   [ref: http://stackoverflow.com/questions/14659891/m2e-wtp-error-path-target-m2e-wtp-web-resources-meta-inf-manifest-mf-no-such]
+10. build the project: right click on project -> Run as -> Maven Build 
+    type: ‘clean install’ in Goals and click Run.  
+11. deploy the project: right click on Tomcat server -> Add and Remove -> Select the project -> click Add -> click Finish.
+    start tomcat server.
+12. open a browser, and type the following url: localhost:8080/helloMavenWeb/
+    you should see the contents of index.jsp 
